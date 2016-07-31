@@ -1,4 +1,4 @@
-# SKPopMenu
+# SKPopMenu 🎈
 Swift tile-based menu for SpriteKit
 
 <img src="http://i.giphy.com/jxvaUdIF4NAGI.gif">
