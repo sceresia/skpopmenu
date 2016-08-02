@@ -1,7 +1,7 @@
 # SKPopMenu 🎈
 Swift tile-based menu for SpriteKit
 
-<img src="http://i.giphy.com/jxvaUdIF4NAGI.gif">
+<img src="http://stephenceresia.ca/wp-content/uploads/2016/07/jxvaUdIF4NAGI.gif">
 
 ## Features
 
