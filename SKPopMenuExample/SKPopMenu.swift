@@ -85,6 +85,7 @@ class SKPopMenu: SKNode {
       let label = SKLabelNode()
       label.text = String(i)
       label.fontColor = SKColor.whiteColor()
+      label.position.y = label.position.y - label.frame.size.height/2
       node.addChild(label)
       
       // add the node
@@ -117,6 +118,7 @@ class SKPopMenu: SKNode {
     let node = sections[section-1]
     node.removeAllChildren()
     node.addChild(label)
+    label.position.y = label.position.y - label.frame.size.height/2
   }
   
   func setSectionSprite(section:Int, sprite:SKSpriteNode) {
