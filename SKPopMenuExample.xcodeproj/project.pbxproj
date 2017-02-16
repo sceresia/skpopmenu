@@ -15,6 +15,7 @@
 		DC3179331D4CD16300DC77EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DC3179321D4CD16300DC77EA /* Assets.xcassets */; };
 		DC3179361D4CD16300DC77EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC3179341D4CD16300DC77EA /* LaunchScreen.storyboard */; };
 		DC31793E1D4CD17800DC77EA /* SKPopMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC31793D1D4CD17800DC77EA /* SKPopMenu.swift */; };
+		DC515EF81E553CE50098E083 /* img.png in Resources */ = {isa = PBXBuildFile; fileRef = DC515EF71E553CE50098E083 /* img.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		DC3179351D4CD16300DC77EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DC3179371D4CD16300DC77EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DC31793D1D4CD17800DC77EA /* SKPopMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPopMenu.swift; sourceTree = "<group>"; };
+		DC515EF71E553CE50098E083 /* img.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				DC3179321D4CD16300DC77EA /* Assets.xcassets */,
 				DC3179341D4CD16300DC77EA /* LaunchScreen.storyboard */,
 				DC3179371D4CD16300DC77EA /* Info.plist */,
+				DC515EF71E553CE50098E083 /* img.png */,
 			);
 			path = SKPopMenuExample;
 			sourceTree = "<group>";
@@ -100,11 +103,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Stephen Ceresia";
 				TargetAttributes = {
 					DC3179231D4CD16300DC77EA = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0820;
 					};
 				};
 			};
@@ -131,6 +135,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC515EF81E553CE50098E083 /* img.png in Resources */,
 				DC31792A1D4CD16300DC77EA /* GameScene.sks in Resources */,
 				DC3179361D4CD16300DC77EA /* LaunchScreen.storyboard in Resources */,
 				DC3179331D4CD16300DC77EA /* Assets.xcassets in Resources */,
@@ -188,8 +193,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -233,8 +240,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -253,6 +262,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -265,6 +275,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SKPopMenuExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -276,6 +287,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = SKPopMenuExample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -298,6 +310,7 @@
 				DC31793C1D4CD16400DC77EA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

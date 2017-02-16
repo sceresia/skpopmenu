@@ -9,18 +9,18 @@
 import SpriteKit
 
 @objc protocol SKPopMenuDelegate {
-  optional func sectionTapped(index:Int, name:String)
-  optional func popMenuDidDisappear() // called when the menu is completely dismissed
-  optional func popMenuDidAppear() // called when the menu is completed revealed
+  @objc optional func sectionTapped(_ index:Int, name:String)
+  @objc optional func popMenuDidDisappear() // called when the menu is completely dismissed
+  @objc optional func popMenuDidAppear() // called when the menu is completed revealed
 }
 
-class SKPopMenu: SKNode {
+class SKPopMenu: SKNode, SKPopMenuDelegate {
   
   var popMenuDelegate: SKPopMenuDelegate?
   var numberOfSections: Int!
-  var sections: [SKShapeNode]!
+  var sections: [SKSpriteNode]!
   var sceneFrame: CGRect!
-  let defaultColor = SKColor.cyanColor()
+  let defaultColor = SKColor.cyan
   var isShowing = false
   
   convenience init(numberOfSections:Int, sceneFrame:CGRect) {
@@ -31,11 +31,11 @@ class SKPopMenu: SKNode {
       return
     }
     
-    self.popMenuDelegate = SKPopMenuDelegate?()
-    self.userInteractionEnabled = true
+    self.popMenuDelegate = SKPopMenuDelegate?(self)
+    self.isUserInteractionEnabled = true
     self.numberOfSections = numberOfSections
     self.sceneFrame = sceneFrame
-    self.sections = [SKShapeNode]()
+    self.sections = [SKSpriteNode]()
     
     prepareMenu()
   }
@@ -48,44 +48,46 @@ class SKPopMenu: SKNode {
     fatalError("init(coder:) has not been implemented")
   }
   
-  private func prepareMenu() {
+  fileprivate func prepareMenu() {
     
     for i in 0..<self.numberOfSections {
       
-      var node = SKShapeNode(rectOfSize: CGSize(width: sceneFrame.size.width/2, height: sceneFrame.size.height/4))
+      let node = SKSpriteNode(color: defaultColor, size: CGSize(width: sceneFrame.size.width, height: sceneFrame.size.height/4))
       
       // SET X POSITION
       if i % 2 == 0 {
         // current section is even index; left side
-        node.position.x = CGRectGetMinX(sceneFrame) + node.frame.size.width/2
-        node.fillColor = defaultColor
+        node.position.x = sceneFrame.minX + node.frame.size.width/2
         
         // check if it's the last item. if so, resize it to full width
         if i+1 == self.numberOfSections {
-          node = SKShapeNode(rectOfSize: CGSize(width: sceneFrame.size.width, height: sceneFrame.size.height/4))
-          node.position.x = CGRectGetMinX(sceneFrame) + node.frame.size.width/2
-          node.fillColor = defaultColor
+          node.size = CGSize(width: sceneFrame.size.width, height: sceneFrame.size.height/4)
+          node.position.x = sceneFrame.minX + node.frame.size.width/2
         }
         
       } else {
         // current section is odd index; right side
-        node.position.x = CGRectGetMidX(sceneFrame) + node.frame.size.width/2
-        node.fillColor = defaultColor
+        node.position.x = sceneFrame.midX + node.frame.size.width/2
       }
       
       // SET Y POSITION
       let amount = CGFloat(getRowForIndex(i)) + 0.5
       let distance = node.frame.size.height*(amount)
       node.position.y = distance
-      
-      node.lineWidth = CGFloat(0)
       node.name = "section " + "\(i)"
       
       // add default label
       let label = SKLabelNode()
       label.text = String(i)
-      label.fontColor = SKColor.whiteColor()
-      label.position.y = label.position.y - label.frame.size.height/2
+      label.fontColor = SKColor.white
+      label.horizontalAlignmentMode = .center
+      label.verticalAlignmentMode = .center
+      
+      // re-center label for half-sized node; check if not a wide node
+      if !((i % 2 == 0) && (i+1 == self.numberOfSections)) {
+        label.position.x = label.position.x - node.frame.size.width/4
+      }
+      
       node.addChild(label)
       
       // add the node
@@ -98,81 +100,93 @@ class SKPopMenu: SKNode {
     
   }
   
-  func setSectionName(section:Int, text:String) {
+  func setSectionName(_ section:Int, text:String) {
     let node = sections[section-1]
     node.name = text
   }
   
-  func setColor(color:SKColor) {
+  func setColor(_ color:SKColor) {
     for node in sections {
-      node.fillColor = color
+      node.color = color
     }
   }
   
-  func setSectionColor(section:Int, color:SKColor) {
+  func setSectionColor(_ section:Int, color:SKColor) {
     let node = sections[section-1]
-    node.fillColor = color
+    node.color = color
   }
   
-  func setSectionLabel(section:Int, label:SKLabelNode) {
+  func setSectionLabel(_ section:Int, label:SKLabelNode) {
     let node = sections[section-1]
     node.removeAllChildren()
+    label.horizontalAlignmentMode = .center
+    label.verticalAlignmentMode = .center
+    
+    let i = section-1
+    if !((i % 2 == 0) && (i+1 == self.numberOfSections)) {
+      label.position.x = label.position.x - node.frame.size.width/4
+    }
+    
     node.addChild(label)
-    label.position.y = label.position.y - label.frame.size.height/2
   }
   
-  func setSectionSprite(section:Int, sprite:SKSpriteNode) {
+  func setSectionSprite(_ section:Int, sprite:SKSpriteNode) {
     let node = sections[section-1]
     node.removeAllChildren()
     node.addChild(sprite)
+    
+    let i = section-1
+    if !((i % 2 == 0) && (i+1 == self.numberOfSections)) {
+      sprite.position.x = sprite.position.x - node.frame.size.width/4
+    }
   }
   
-  func slideDown(duration:NSTimeInterval) {
+  func slideDown(_ duration:TimeInterval) {
     isShowing = false
     
     for i in 0..<sections.count {
       let node = sections[i]
       let amount = CGFloat(getRowForIndex(i)) + 0.5
       let distance = -node.frame.size.height*(amount)
-      let moveAction = (SKAction.moveTo(CGPointMake(node.position.x, distance), duration: duration))
+      let moveAction = (SKAction.move(to: CGPoint(x: node.position.x, y: distance), duration: duration))
       
       
       if i != 0 {
-        node.runAction(moveAction)
+        node.run(moveAction)
       } else {
         // it's the first item; when it reaches the bottom, we call the delegate
-        let block = SKAction.runBlock({ 
+        let block = SKAction.run({ 
           self.popMenuDelegate?.popMenuDidDisappear!()
         })
-        node.runAction(SKAction.sequence([moveAction, block]))
+        node.run(SKAction.sequence([moveAction, block]))
       }
       
     }
   }
   
-  func slideUp(duration:NSTimeInterval) {
+  func slideUp(_ duration:TimeInterval) {
     isShowing = true
     
     for i in 0..<sections.count {
       let node = sections[i]
       let amount = CGFloat(getRowForIndex(i)) + 0.5
       let distance = node.frame.size.height*(amount)
-      let moveAction = (SKAction.moveTo(CGPointMake(node.position.x, distance), duration: duration))
+      let moveAction = (SKAction.move(to: CGPoint(x: node.position.x, y: distance), duration: duration))
 
       if i != sections.count-1 {
-        node.runAction(moveAction)
+        node.run(moveAction)
       } else {
         // it's the last item; when it reaches the top, we call the delegate
-        let block = SKAction.runBlock({
+        let block = SKAction.run({
           self.popMenuDelegate?.popMenuDidAppear!()
         })
-        node.runAction(SKAction.sequence([moveAction, block]))
+        node.run(SKAction.sequence([moveAction, block]))
       }
       
     }
   }
   
-  private func getRowForIndex(index:Int) -> Int {
+  fileprivate func getRowForIndex(_ index:Int) -> Int {
     if index < 2 {
      return 0
     } else if index == 2 || index == 3 && index/2 == 1 {
@@ -185,11 +199,11 @@ class SKPopMenu: SKNode {
     return 0 // FAIL
   }
   
-  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     for touch in touches {
       for node in sections {
-        if node.containsPoint(touch.locationInNode(self)) {
-          self.popMenuDelegate?.sectionTapped!(sections.indexOf(node)!, name: node.name!)
+        if node.contains(touch.location(in: self)) {
+          self.popMenuDelegate?.sectionTapped!(sections.index(of: node)!, name: node.name!)
         }
       }
     }
